@@ -41,7 +41,7 @@ function showModal(id) {
 
   xhr.onload = function(){
     const response = JSON.parse(this.responseText);
-    console.log(response.name);
+    
     document.getElementById('student-name').innerHTML = `${response.name} ${response.surname}`;
     document.getElementById('single-student-table-body').innerHTML = '';
 
