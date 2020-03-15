@@ -61,4 +61,49 @@ function showModal(id) {
   xhr.send();
 }
 
+//button_submit.addeventlistener addStudentToList
+document.getElementById('btn-add-student').addEventListener('click', addStudentToList);
+
+function addStudentToList() {
+  const id = document.getElementById('new-student-id').value;
+  const name = document.getElementById('new-student-name').value;
+  const surname = document.getElementById('new-student-surname').value;
+  console.log(id, name, surname);
+
+  const url =`http://localhost:7777/student`;
+
+  const xhr = new XMLHttpRequest;
+  xhr.open("POST", url, true);
+  xhr.setRequestHeader('Content-type', 'application/json');
+
+  xhr.onload = function(){
+    location.reload();   
+  }
+
+  if(id === '' || name === '' || surname === '') {
+    showAlert('Pleas complete all fields');
+    return;
+  } 
+  const student = new Object;
+  student["id"] = id;
+  student['name'] = name;
+  student['surname'] = surname; 
+
+  xhr.send(JSON.stringify(student));
+}
+
+function showAlert(err) {
+  const form = document.getElementById('form-create-student');
+  const container = document.getElementById('modal-body-create-student');
+  const alert = document.createElement('div');
+  alert.className = 'alert alert-danger';
+  alert.appendChild(document.createTextNode(err));
+
+  container.insertBefore(alert, form);
+
+  setTimeout(function() {
+    document.querySelector('.alert').remove();
+  }, 5000);
+}
+
 getStudentsList();
