@@ -61,7 +61,6 @@ function showModal(id) {
   xhr.send();
 }
 
-//button_submit.addeventlistener addStudentToList
 document.getElementById('btn-add-student').addEventListener('click', addStudentToList);
 
 function addStudentToList() {
