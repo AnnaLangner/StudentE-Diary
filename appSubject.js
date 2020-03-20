@@ -68,11 +68,13 @@ function showModal(id) {
       addGradesInput.setAttribute("aria-describedby", "button-addon");
      
       const addGradesDivBtn = document.createElement('div');
-      addGradesDivBtn.className = "input-group-append";
+      addGradesDivBtn.className = "input-group-prepend";
       const addGradesBtn = document.createElement('button');
       addGradesBtn.onclick = function () {addGradesToStudent(response[j].id, id)} 
       addGradesBtn.className = "btn btn-outline-secondary btn-adding-grades";
-      addGradesBtn.setAttribute("type", "button");        
+      addGradesBtn.setAttribute("type", "button");       
+      addGradesBtn.innerHTML = '<i class="fas fa-plus-circle">';
+
       addGradesDivBtn.appendChild(addGradesBtn);
 
       addGradesDiv.appendChild(addGradesDivBtn);
@@ -91,6 +93,27 @@ function showModal(id) {
     }    
   }
   xhr.send();
+}
+
+function addGradesToStudent(studentId, subjectId) {
+  const inputGrade = document.getElementById('input-' + studentId).value;
+  const xhr = new XMLHttpRequest();  
+  const url = `http://localhost:7777/student/${studentId}/subject/${subjectId}/grades`
+
+  xhr.open('POST', url, true);
+  xhr.setRequestHeader('Content-type', 'application/json');
+  xhr.onload = function() {
+    showModal(subjectId)
+  }
+
+  if(inputGrade === '' || inputGrade > 6 || inputGrade < 1) {
+    return;
+  } 
+
+  const newGrade = new Object;
+  newGrade['grades'] = [inputGrade];
+
+  xhr.send(JSON.stringify(newGrade));
 }
 
 document.getElementById('btn-add-subject').addEventListener('click', addSubjectToList);
@@ -118,32 +141,6 @@ function addSubjectToList() {
   subject['name'] = name;
 
   xhr.send(JSON.stringify(subject))
-}
-
-function addGradesToStudent(studentId, subjectId) {
-  const inputGrade = document.getElementById('input-' + studentId).value;
-  console.log(inputGrade)
-  const xhr = new XMLHttpRequest();  
-  const url = `http://localhost:7777/student/${studentId}/subject/${subjectId}/grades`
-
-  xhr.open('POST', url, true);
-  xhr.setRequestHeader('Content-type', 'application/json');
-  xhr.onload = function() {
-    //location.reload();
-    showModal(subjectId)
-  }
-
- 
-
-  if(inputGrade === '') {
-    showAlert('Pleas complete field');
-    return;
-  } 
-
-  const newGrade = new Object;
-  newGrade['grades'] = [inputGrade];
-
-  xhr.send(JSON.stringify(newGrade));
 }
 
 function showAlert(err) {
