@@ -1,5 +1,7 @@
+const baseUrl = `https://my-students-app-test.herokuapp.com/subject`;
+
 function getSubjectsList() {
-  const url = `http://localhost:7777/subject`;
+  const url = baseUrl;
 
   const xhr = new XMLHttpRequest;
 
@@ -36,7 +38,7 @@ function compareStudent (a, b) {
 }
 
 function showModal(id) {
-  const url = `http://localhost:7777/subject/${id}/grades`;
+  const url = `${baseUrl}/${id}/grades`;
 
   const xhr = new XMLHttpRequest;
 
@@ -50,8 +52,14 @@ function showModal(id) {
 
     for(let j = 0; j<response.length; j++) {
       document.getElementById('subject-name').innerHTML = `${response[j].subject}`; 
-      const arr = response[j].grades;    
-      const arrAvg = (arr.reduce((a,b) => a+b)/ arr.length).toFixed(1);
+      const arr = response[j].grades;  
+      let arrAvg; 
+      if (arr.length === 0) {
+        arrAvg = 0;
+      } else {
+        arrAvg = (arr.reduce((a,b) => a+b)/ arr.length).toFixed(1);
+      }
+      
 
       const addGradesDiv = document.createElement('div');
       addGradesDiv.className = 'input-group';
@@ -98,7 +106,7 @@ function showModal(id) {
 function addGradesToStudent(studentId, subjectId) {
   const inputGrade = document.getElementById('input-' + studentId).value;
   const xhr = new XMLHttpRequest();  
-  const url = `http://localhost:7777/student/${studentId}/subject/${subjectId}/grades`
+  const url = `https://my-students-app-test.herokuapp.com/student/${studentId}/subject/${subjectId}/grades`
 
   xhr.open('POST', url, true);
   xhr.setRequestHeader('Content-type', 'application/json');
@@ -121,7 +129,7 @@ document.getElementById('btn-add-subject').addEventListener('click', addSubjectT
 function addSubjectToList() {
   const id = document.getElementById('new-subject-id').value;
   const name = document.getElementById('new-subject-name').value;
-  const url = `http://localhost:7777/subject`;
+  const url = baseUrl;
   const xhr = new XMLHttpRequest();
 
   xhr.open("POST", url, true);

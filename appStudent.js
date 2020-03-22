@@ -1,5 +1,7 @@
+const baseUrl = 'https://my-students-app-test.herokuapp.com/student';
+
 function getStudentsList() {
-  const url = 'http://localhost:7777/student';
+  const url = baseUrl;
 
   const xhr = new XMLHttpRequest;
   xhr.open("GET", url, true);
@@ -34,7 +36,7 @@ function getStudentsList() {
 }
 
 function showModal(id) {  
-  const url = `http://localhost:7777/student/${id}/withGrades`;
+  const url = `${baseUrl}/${id}/withGrades`;
 
   const xhr = new XMLHttpRequest;
   xhr.open("GET", url, true);
@@ -46,8 +48,14 @@ function showModal(id) {
     document.getElementById('single-student-table-body').innerHTML = '';
 
     for (let i=0; i<response.subjectGrades.length; i++) {      
-      const arr = response.subjectGrades[i].grades;    
-      const arrAvg = (arr.reduce((a,b) => a+b)/ arr.length).toFixed(1);
+      const arr = response.subjectGrades[i].grades;   
+      let arrAvg ;
+
+      if (arr.length === 0) {
+        arrAvg = 0;
+      } else {
+        arrAvg = (arr.reduce((a,b) => a+b)/ arr.length).toFixed(1);
+      }      
         
       const row = document.createElement('tr');
       row.innerHTML = `
@@ -67,9 +75,8 @@ function addStudentToList() {
   const id = document.getElementById('new-student-id').value;
   const name = document.getElementById('new-student-name').value;
   const surname = document.getElementById('new-student-surname').value;
-  console.log(id, name, surname);
 
-  const url =`http://localhost:7777/student`;
+  const url = baseUrl;
 
   const xhr = new XMLHttpRequest;
   xhr.open("POST", url, true);
